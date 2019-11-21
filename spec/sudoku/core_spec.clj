@@ -2,24 +2,22 @@
   (:require [speclj.core :refer :all]
             [sudoku.core :refer :all]))
 
-(let [empty-row (repeat 9 :x)
-      empty-board (repeat 9 empty-row)]
-  (describe
-    "add-to-board"
-    (it "should add a list of tokens to the board"
-        (let [expected-row (concat [:0 :1] (repeat 7 :x))
-              expected-board (concat expected-row (repeat 8 empty-row))]
-          (should= expected-board (add-to-board empty-board [[0 0] :0
-                                                             [0 1] :1])))))
-  (describe
-    "a valid board"
-    (it "is valid if empty"
-        (should (valid? empty-board))))
+(defn is-valid-board [rank board]
+  true)
 
-  (describe
-    "an invalid board"
-    (it "is invalid when there are any repeats in a row"
-        (should-not (valid? (add-to-board empty-board [[0 0] :0
-                                                       [0 1] :1])))
-        ))
+(defn solve-board [rank board]
+  [[1]])
+
+
+;This is the degenerate case.  A sudoku board of rank 1.  Such a board has only one possible solution
+;which is [[1]].
+(describe
+  "a rank 1 game"
+  (context
+    "it has only one solution [[1]]"
+    (it "is valid"
+        (should (is-valid-board 1 [[1]])))
+    (it "should solve [[]]"
+        (should= [[1]] (solve-board 1 [[]])))
+    )
   )
