@@ -1,6 +1,16 @@
 (ns sudoku.core)
 
-(defn is-column-valid? [rank column]
+(defn extract-row [row board]
+  (board row))
+
+(defn extract-column [column board]
+  (map #(nth % column) board))
+
+(defn extract-sector [rank [sector-column sector-row] board]
+  (let [sector-rows (take rank (drop (* rank sector-row) board))]
+    (flatten (map #(take rank (drop (* rank sector-column) %)) sector-rows))))
+
+(defn is-grouping-valid? [rank column]
   (and
     (= (* rank rank) (count column))
     (let [numbers (remove nil? column)]
