@@ -30,27 +30,23 @@
       (= expected-size (count board))
       (every? #(= expected-size (count %)) board))))
 
-(defn is-valid-board? [rank board]
-  (and
-    (is-valid-dimensions? rank board)
-    (let [rows (for [row (range (* rank rank))]
-                 (extract-row row board))
-          cols (for [col (range (* rank rank))]
-                 (extract-column col board))
-          sectors (for [row (range rank) col (range rank)]
-                    (extract-sector rank [col row] board))
-          groupings (concat rows cols sectors)]
-      (every? #(is-valid-grouping? rank %) groupings))))
-
-(defn is-solved-board? [rank board]
+(defn get-all-groupings [rank board]
   (let [rows (for [row (range (* rank rank))]
                (extract-row row board))
         cols (for [col (range (* rank rank))]
                (extract-column col board))
         sectors (for [row (range rank) col (range rank)]
-                  (extract-sector rank [col row] board))
-        groupings (concat rows cols sectors)]
-    (every? #(is-solved-grouping? rank %) groupings)))
+                  (extract-sector rank [col row] board))]
+    (concat rows cols sectors)
+    ))
+
+(defn is-valid-board? [rank board]
+  (and
+    (is-valid-dimensions? rank board)
+    (every? #(is-valid-grouping? rank %) (get-all-groupings rank board))))
+
+(defn is-solved-board? [rank board]
+  (every? #(is-solved-grouping? rank %) (get-all-groupings rank board)))
 
 (defn solve-board [rank board]
   [[1]])
