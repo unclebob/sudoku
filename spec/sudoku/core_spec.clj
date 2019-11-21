@@ -2,6 +2,8 @@
   (:require [speclj.core :refer :all]
             [sudoku.core :refer :all]))
 
+(def N nil)
+
 ;This is the degenerate case.  A sudoku board of rank 1.  Such a board has only one possible solution
 ;which is [[1]].
 (describe
@@ -49,43 +51,74 @@
     (it "is invalid if there are duplicate numbers"
         (should-not (is-valid-grouping? 2 [1 1 1 1]))
         (should-not (is-valid-grouping? 2 [1 1 2 3]))
-        (should-not (is-valid-grouping? 2 [1 nil 2 1])))
+        (should-not (is-valid-grouping? 2 [1 N 2 1])))
     (it "is valid if correct size and no duplicates."
         (should (is-valid-grouping? 2 [1 2 3 4]))
-        (should (is-valid-grouping? 2 [1 2 nil nil])))
+        (should (is-valid-grouping? 2 [1 2 N N])))
     (it "is solved if valid and no nils."
         (should (is-solved-grouping? 2 [1 2 3 4]))
-        (should-not (is-solved-grouping? 2 [1 2 nil 4]))))
+        (should-not (is-solved-grouping? 2 [1 2 N 4]))))
 
   (context
     "can determine if a board is valid"
     (it "is valid if solved"
-        (should (is-valid-board? 2 [
-                                     [1 2 3 4]
-                                     [3 4 1 2]
-                                     [2 3 4 1]
-                                     [4 1 2 3]]))))
+        (should (is-valid-board? 2 [[1 2 3 4]
+                                    [3 4 1 2]
+                                    [2 3 4 1]
+                                    [4 1 2 3]]))))
 
   (context
     "Solutions can be detected."
     (it "should see this as solved."
-        (should (is-solved-board? 2 [
-                                     [1 2 3 4]
+        (should (is-solved-board? 2 [[1 2 3 4]
                                      [3 4 1 2]
                                      [2 3 4 1]
                                      [4 1 2 3]])))
 
     (it "should not see a board with nils as solved"
-        (should-not (is-solved-board? 2 [
-                                         [1 nil 3 4]
+        (should-not (is-solved-board? 2 [[1 N 3 4]
                                          [3 4 1 2]
                                          [2 3 4 1]
                                          [4 1 2 3]])))
     (it "should not see an invalid board as solved"
-        (should-not (is-solved-board? 2 [
-                                         [1 4 3 4]
+        (should-not (is-solved-board? 2 [[1 4 3 4]
                                          [3 2 1 2]
                                          [2 3 4 1]
                                          [4 1 2 3]]))))
   )
+
+(describe
+  "The sudoku solver"
+  (context
+    "It can identify missing cells"
+    (it "will find the missing cell in a rank 1 board"
+        (should= [[0 0]] (find-missing-cells 1 [[N]]))
+        (should= [] (find-missing-cells 1 [[1]])))
+    (it "will find missing dells in a rank 2 board"
+        (should= (set [[2 1] [1 2]])
+                 (set (find-missing-cells 2 [[1 4 3 4]
+                                             [3 4 N 2]
+                                             [2 N 4 1]
+                                             [4 1 2 3]]))))
+    )
+
+  (context
+    "It can find the possible values for the missing cells"
+    (it "will find the only possible value for rank 1"
+        (should= #{1} (find-possible-values 1 [0 0] [[N]])))
+    (it "will find the missing values for rank 2"
+        (should= #{2} (find-possible-values 2 [1 0] [[1 N 3 4]
+                                                     [3 4 1 2]
+                                                     [2 3 4 1]
+                                                     [4 1 2 3]]))
+        (should= #{4 2} (find-possible-values 2 [2 2] [[1 2 3 4]
+                                                       [3 4 1 2]
+                                                       [N 3 N N]
+                                                       [4 1 N N]]))
+        )
+
+    )
+
+  )
+
 

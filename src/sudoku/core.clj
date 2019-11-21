@@ -48,5 +48,23 @@
 (defn is-solved-board? [rank board]
   (every? #(is-solved-grouping? rank %) (get-all-groupings rank board)))
 
+(defn find-missing-cells [rank board]
+  (let [group-size (* rank rank)
+        coords (for [col (range group-size)
+                     row (range group-size)]
+                 (if (nil? ((board row) col))
+                   [col row]
+                   nil))]
+    (filter some? coords)))
+
+(defn find-possible-values [rank [col row] board]
+  (let [possible (set (drop 1 (range (inc (* rank rank)))))
+        column-grouping (set (extract-column col board))
+        row-grouping (set (extract-row row board))
+        sector-col (quot col rank)
+        sector-row (quot row rank)
+        sector-grouping (set (extract-sector rank [sector-col sector-row] board))]
+    (clojure.set/difference possible column-grouping row-grouping sector-grouping)))
+
 (defn solve-board [rank board]
   [[1]])
