@@ -25,5 +25,18 @@
 
 (describe
   "a rank 2 game"
+  (context
+    "a column"
+    (it "is invalid if the wrong size."
+        (should-not (is-column-valid? 2 []))
+        (should-not (is-column-valid? 2 [1 2 3 4 nil])))
+    (it "is invalid if there are duplicate numbers"
+        (should-not (is-column-valid? 2 [1 1 1 1]))
+        (should-not (is-column-valid? 2 [1 1 2 3]))
+        (should-not (is-column-valid? 2 [1 nil 2 1]))
+        )
+    (it "is valid if correct size and no duplicates."
+        (should (is-column-valid? 2 [1 2 3 4]))
+        (should (is-column-valid? 2 [1 2 nil nil]))))
   )
 

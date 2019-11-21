@@ -1,14 +1,18 @@
 (ns sudoku.core)
 
+(defn is-column-valid? [rank column]
+  (and
+    (= (* rank rank) (count column))
+    (let [numbers (remove nil? column)]
+      (= (count numbers) (count (set numbers))))))
+
 (defn is-valid-board? [rank board]
-  (if (not= 1 (count board))
-    false
-    (if (not= 1 (count (board 0)))
-      false
-      (condp = ((board 0) 0)
-        1 true
-        nil true
-        false))))
+  (and (= 1 (count board))
+       (= 1 (count (board 0)))
+       (condp = ((board 0) 0)
+         1 true
+         nil true
+         false)))
 
 (defn is-solved-board? [rank board]
   (= board [[1]]))
