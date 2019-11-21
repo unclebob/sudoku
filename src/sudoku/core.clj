@@ -10,11 +10,16 @@
   (let [sector-rows (take rank (drop (* rank sector-row) board))]
     (flatten (map #(take rank (drop (* rank sector-column) %)) sector-rows))))
 
-(defn is-grouping-valid? [rank column]
+(defn is-valid-grouping? [rank grouping]
   (and
-    (= (* rank rank) (count column))
-    (let [numbers (remove nil? column)]
+    (= (* rank rank) (count grouping))
+    (let [numbers (remove nil? grouping)]
       (= (count numbers) (count (set numbers))))))
+
+(defn is-solved-grouping? [rank grouping]
+  (and
+    (every? some? grouping)
+    (is-valid-grouping? rank grouping)))
 
 (defn is-valid-board? [rank board]
   (and (= 1 (count board))
@@ -25,7 +30,14 @@
          false)))
 
 (defn is-solved-board? [rank board]
-  (= board [[1]]))
+  (let [rows (for [row (range (* rank rank))]
+               (extract-row row board))
+        cols (for [col (range (* rank rank))]
+               (extract-column col board))
+        sectors (for [row (range rank) col (range rank)]
+                  (extract-sector rank [col row] board))
+        groupings (concat rows cols sectors)]
+    (every? #(is-solved-grouping? rank %) groupings)))
 
 (defn solve-board [rank board]
   [[1]])
