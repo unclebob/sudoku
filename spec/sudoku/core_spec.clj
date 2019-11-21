@@ -58,6 +58,15 @@
         (should-not (is-solved-grouping? 2 [1 2 nil 4]))))
 
   (context
+    "can determine if a board is valid"
+    (it "is valid if solved"
+        (should (is-valid-board? 2 [
+                                     [1 2 3 4]
+                                     [3 4 1 2]
+                                     [2 3 4 1]
+                                     [4 1 2 3]]))))
+
+  (context
     "Solutions can be detected."
     (it "should see this as solved."
         (should (is-solved-board? 2 [
