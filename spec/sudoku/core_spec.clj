@@ -21,9 +21,9 @@
         (should-not (is-valid-board? 1 [[2]])))
     (it "should detect the one solution"
         (should (is-solved-board? 1 [[1]]))
-        (should-not (is-solved-board? 1 [[nil]])))
-    (it "should solve [[]]"
-        (should= [[1]] (solve-board 1 [[nil]])))))
+        (should-not (is-solved-board? 1 [[N]])))
+    (it "should solve [[N]]"
+        (should= [[[1]]] (solve-board 1 [[N]])))))
 
 (describe
   "a rank 2 game"
@@ -125,14 +125,69 @@
         (should= #{[[0 0] #{1}]} (associate-possible-values 1 [[N]])))
     (it "associates rank 2"
         (should= #{[[0 2] #{2}]
-                  [[2 2] #{4 2}]
-                  [[2 3] #{2}]}
-                   (associate-possible-values 2 [[1 2 3 4]
-                                                 [3 4 1 2]
-                                                 [N 3 N 1]
-                                                 [4 1 N 3]]))
+                   [[2 2] #{4 2}]
+                   [[2 3] #{2}]}
+                 (associate-possible-values 2 [[1 2 3 4]
+                                               [3 4 1 2]
+                                               [N 3 N 1]
+                                               [4 1 N 3]]))
         )
     )
+
+  (it
+    "can set the cell of a board"
+    (should= [[1]] (set-cell [[N]] [0 0] 1))
+    (should= [[1 2 3 4]
+              [2 3 4 1]
+              [4 3 2 1]
+              [2 4 1 3]] (set-cell [[1 2 3 4]
+                                    [2 3 1 1]
+                                    [4 3 2 1]
+                                    [2 4 1 3]] [2 1] 4)))
+
+  (it
+    "can solve the rank 2 board"
+    (should= [[[1 2 3 4]
+               [3 4 1 2]
+               [2 3 4 1]
+               [4 1 2 3]]] (solve-board 2 [[1 2 3 4]
+                                           [3 4 1 2]
+                                           [N 3 N 1]
+                                           [4 1 N 3]])))
+
+  (it
+    "can solve the rank 2 boards with multiple solutions"
+    (should= [[[1 2 3 4]
+               [3 4 1 2]
+               [4 3 2 1]
+               [2 1 4 3]]
+              [[1 2 3 4]
+               [3 4 1 2]
+               [2 3 4 1]
+               [4 1 2 3]]] (solve-board 2 [[1 2 3 4]
+                                           [3 4 1 2]
+                                           [N 3 N 1]
+                                           [N 1 N 3]])))
+
+  (it
+    "can solve rank 3"
+    (should= [[[4 3 5 2 6 9 7 8 1]
+               [6 8 2 5 7 1 4 9 3]
+               [1 9 7 8 3 4 5 6 2]
+               [8 2 6 1 9 5 3 4 7]
+               [3 7 4 6 8 2 9 1 5]
+               [9 5 1 7 4 3 6 2 8]
+               [5 1 9 3 2 6 8 7 4]
+               [2 4 8 9 5 7 1 3 6]
+               [7 6 3 4 1 8 2 5 9]]] (solve-board 3 [[N N N 2 6 N 7 N 1]
+                                                     [6 8 N N 7 N N 9 N]
+                                                     [1 9 N N N 4 5 N N]
+                                                     [8 2 N 1 N N N 4 N]
+                                                     [N N 4 6 N 2 9 N N]
+                                                     [N 5 N N N 3 N 2 8]
+                                                     [N N 9 3 N N N 7 4]
+                                                     [N 4 N N 5 N N 3 6]
+                                                     [7 N 3 N 1 8 N N N]])))
 
   )
 

@@ -72,5 +72,22 @@
         associated-values (map #(vector % (find-possible-values rank % board)) missing-cells)]
     (set associated-values)))
 
+
+
+(defn set-cell [board [col row] value]
+  (assoc-in board [row col] value)
+  )
+
+(defn solve-board-task [rank board solutions]
+  (let [missing-cells (find-missing-cells rank board)]
+    (if (empty? missing-cells)
+      (conj solutions board)
+      (let [values (find-possible-values rank (first missing-cells) board)
+            new-solutions (for [value values]
+                            (let [new-board (set-cell board (first missing-cells) value)]
+                              (solve-board-task rank new-board [])))
+            flat-solutions (apply concat new-solutions)]
+        (concat solutions flat-solutions)))))
+
 (defn solve-board [rank board]
-  [[1]])
+  (solve-board-task rank board []))
