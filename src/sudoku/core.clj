@@ -1,4 +1,5 @@
-(ns sudoku.core)
+(ns sudoku.core
+  (:require [clojure.set :as set]))
 
 (defn extract-row [row board]
   (board row))
@@ -64,7 +65,12 @@
         sector-col (quot col rank)
         sector-row (quot row rank)
         sector-grouping (set (extract-sector rank [sector-col sector-row] board))]
-    (clojure.set/difference possible column-grouping row-grouping sector-grouping)))
+    (set/difference possible column-grouping row-grouping sector-grouping)))
+
+(defn associate-possible-values [rank board]
+  (let [missing-cells (find-missing-cells rank board)
+        associated-values (map #(vector % (find-possible-values rank % board)) missing-cells)]
+    (set associated-values)))
 
 (defn solve-board [rank board]
   [[1]])

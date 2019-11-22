@@ -119,6 +119,21 @@
 
     )
 
+  (context
+    "it can associate missing cells with possible values."
+    (it "associates rank 1"
+        (should= #{[[0 0] #{1}]} (associate-possible-values 1 [[N]])))
+    (it "associates rank 2"
+        (should= #{[[0 2] #{2}]
+                  [[2 2] #{4 2}]
+                  [[2 3] #{2}]}
+                   (associate-possible-values 2 [[1 2 3 4]
+                                                 [3 4 1 2]
+                                                 [N 3 N 1]
+                                                 [4 1 N 3]]))
+        )
+    )
+
   )
 
 
