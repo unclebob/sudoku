@@ -189,6 +189,18 @@
                                                      [N 4 N N 5 N N 3 6]
                                                      [7 N 3 N 1 8 N N N]])))
 
+  ;(it
+  ;  "can solve not fun problems"
+  ;  (should= [] (solve-board 3 [[N 2 N N N N N N N]
+  ;                              [N N N 6 N N N N 3]
+  ;                              [N 7 4 N 8 N N N N]
+  ;                              [N N N N N 3 N N 2]
+  ;                              [N 8 N N 4 N N 1 N]
+  ;                              [6 N N 5 N N N N N]
+  ;                              [N N N N 1 N 7 8 N]
+  ;                              [5 N N N N 9 N N N]
+  ;                              [N N N N N N N 4 N]])))
+
   )
 
 
