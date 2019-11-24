@@ -10,24 +10,12 @@
   "a rank 1 game"
   (context
     "it has only one solution [[1]]"
-    (it "is valid if solved or empty."
-        (should (is-valid-board? 1 [[1]]))
-        (should (is-valid-board? 1 [[nil]])))
-    (it "is invalid if wrong size or digit other than 1"
-        (should-not (is-valid-board? 1 [[1] [1]]))
-        (should-not (is-valid-board? 1 [[1 1]]))
-        (should-not (is-valid-board? 1 []))
-        (should-not (is-valid-board? 1 [[]]))
-        (should-not (is-valid-board? 1 [[2]])))
-    (it "should detect the one solution"
-        (should (is-solved-board? 1 [[1]]))
-        (should-not (is-solved-board? 1 [[N]])))
     (it "should solve [[N]]"
         (should= [[[1]]] (solve-board 1 [[N]])))))
 
 (describe
   "a rank 2 game"
-  (context
+  )(context
     "has groupings consisting of columns, rows, and sectors"
     (let [board [[1 2 3 4]
                  [2 3 4 1]
@@ -43,49 +31,6 @@
           (should= [1 2 2 3] (extract-sector 2 [0 0] board))
           (should= [3 4 4 1] (extract-sector 2 [1 0] board))
           (should= [2 1 1 4] (extract-sector 2 [1 1] board)))))
-  (context
-    "a grouping"
-    (it "is invalid if the wrong size."
-        (should-not (is-valid-grouping? 2 []))
-        (should-not (is-valid-grouping? 2 [1 2 3 4 nil])))
-    (it "is invalid if there are duplicate numbers"
-        (should-not (is-valid-grouping? 2 [1 1 1 1]))
-        (should-not (is-valid-grouping? 2 [1 1 2 3]))
-        (should-not (is-valid-grouping? 2 [1 N 2 1])))
-    (it "is valid if correct size and no duplicates."
-        (should (is-valid-grouping? 2 [1 2 3 4]))
-        (should (is-valid-grouping? 2 [1 2 N N])))
-    (it "is solved if valid and no nils."
-        (should (is-solved-grouping? 2 [1 2 3 4]))
-        (should-not (is-solved-grouping? 2 [1 2 N 4]))))
-
-  (context
-    "can determine if a board is valid"
-    (it "is valid if solved"
-        (should (is-valid-board? 2 [[1 2 3 4]
-                                    [3 4 1 2]
-                                    [2 3 4 1]
-                                    [4 1 2 3]]))))
-
-  (context
-    "Solutions can be detected."
-    (it "should see this as solved."
-        (should (is-solved-board? 2 [[1 2 3 4]
-                                     [3 4 1 2]
-                                     [2 3 4 1]
-                                     [4 1 2 3]])))
-
-    (it "should not see a board with nils as solved"
-        (should-not (is-solved-board? 2 [[1 N 3 4]
-                                         [3 4 1 2]
-                                         [2 3 4 1]
-                                         [4 1 2 3]])))
-    (it "should not see an invalid board as solved"
-        (should-not (is-solved-board? 2 [[1 4 3 4]
-                                         [3 2 1 2]
-                                         [2 3 4 1]
-                                         [4 1 2 3]]))))
-  )
 
 (describe
   "The sudoku solver"
@@ -117,21 +62,6 @@
                                                        [4 1 N N]]))
         )
 
-    )
-
-  (context
-    "it can associate missing cells with possible values."
-    (it "associates rank 1"
-        (should= #{[[0 0] #{1}]} (associate-possible-values 1 [[N]])))
-    (it "associates rank 2"
-        (should= #{[[0 2] #{2}]
-                   [[2 2] #{4 2}]
-                   [[2 3] #{2}]}
-                 (associate-possible-values 2 [[1 2 3 4]
-                                               [3 4 1 2]
-                                               [N 3 N 1]
-                                               [4 1 N 3]]))
-        )
     )
 
   (it
