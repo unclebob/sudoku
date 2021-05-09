@@ -15,7 +15,7 @@
 
 (describe
   "a rank 2 game"
-  )(context
+  (context
     "has groupings consisting of columns, rows, and sectors"
     (let [board [[1 2 3 4]
                  [2 3 4 1]
@@ -30,7 +30,7 @@
       (it "should extract sectors"
           (should= [1 2 2 3] (extract-sector 2 [0 0] board))
           (should= [3 4 4 1] (extract-sector 2 [1 0] board))
-          (should= [2 1 1 4] (extract-sector 2 [1 1] board)))))
+          (should= [2 1 1 4] (extract-sector 2 [1 1] board))))))
 
 (describe
   "The sudoku solver"
